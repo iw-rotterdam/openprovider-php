@@ -61,7 +61,8 @@ class Request
      *
      * @param null $str
      */
-    public function __construct($str = null) {
+    public function __construct($str = null)
+    {
         if ($str) {
             $this->raw = $str;
             $this->parseRequest($str);

@@ -40,7 +40,7 @@ class API
      * @param string $url
      * @param int $timeout
      */
-    public function __construct ($url, $timeout = 1000)
+    public function __construct($url, $timeout = 1000)
     {
         $this->url = $url;
         $this->timeout = $timeout;

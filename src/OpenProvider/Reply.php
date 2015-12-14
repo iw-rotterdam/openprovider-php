@@ -43,7 +43,8 @@ class Reply
      * @param null $str
      * @throws ApiException
      */
-    public function __construct($str = null) {
+    public function __construct($str = null)
+    {
         if ($str) {
             $this->raw = $str;
             $this->parseReply($str);
@@ -67,8 +68,7 @@ class Reply
 
         $arr = API::convertXmlToPhpObj($dom->documentElement);
 
-        if ((!is_array($arr) && trim($arr) == "") || $arr['reply']['code'] == 4005)
-        {
+        if ((!is_array($arr) && trim($arr) == "") || $arr['reply']['code'] == 4005) {
             throw new ApiException('API is temprorarily unavailable due to maintenance', 4005);
         }
 
@@ -148,7 +148,7 @@ class Reply
      *
      * @return array
      */
-    public function getWarnings ()
+    public function getWarnings()
     {
         return $this->warnings;
     }
@@ -188,10 +188,10 @@ class Reply
      *
      * @return string
      */
-    public function getRaw ()
+    public function getRaw()
     {
         if (!$this->raw) {
-            $this->raw .= $this->getReply ();
+            $this->raw .= $this->getReply();
         }
         return $this->raw;
     }
@@ -201,7 +201,7 @@ class Reply
      *
      * @return string
      */
-    public function getReply ()
+    public function getReply()
     {
         $dom = new DOMDocument('1.0', API::$encoding);
 
