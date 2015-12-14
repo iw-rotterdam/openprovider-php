@@ -17,24 +17,24 @@ require 'vendor/autoload.php';
 use OpenProvider\API;
 use OpenProvider\Request;
 
-$api = new API ('https://api.openprovider.eu');
+$api = new API('https://api.openprovider.eu');
 
-$request = new OP_Request;
+$request = new Request();
 $request
     ->setCommand('checkDomainRequest')
-    ->setAuth(array('username' => '[username]', 'password' => '[password]'))
-    ->setArgs(array(
-        'domains' => array(
-            array(
+    ->setAuth([ 'username' => '[username]', 'password' => '[password]' ])
+    ->setArgs([
+        'domains' => [
+            [
                 'name' => 'openprovider',
-                'extension' => 'nl'
-            ),
-            array(
+                'extension' => 'nl',
+            ],
+            [
                 'name' => 'jouwweb',
                 'extension' => 'nl'
-            )
+            ],
         )
-    ));
+    ]);
 
 $reply = $api->setDebug(1)->process($request);
 echo "Code: " . $reply->getFaultCode() . "\n";
