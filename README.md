@@ -3,17 +3,21 @@ PHP interface to OpenProvider API
 
 This package contains a small PHP interface to make use of the OpenProvider API (https://doc.openprovider.eu/index.php/Main_Page).
 
-The files as found in this package are almost identical to the ones as distributed by OpenProvider. So why bother
-creating a package for it? The __distribution__ of OpenProvider consists of a single file and does not make use
-of Composer and it's autoload features.
+**NOTE: It's very important to remember that this version is NOT identical to the API listed above. This version is compliant to PSR-2 and PSR-4, and is therefore namespaced accordingly.**
+
+**Be watchful when following the API docs**
+
 
 Example
 -------
 
 ```php
-include 'vendor/autoload.php';
+require 'vendor/autoload.php';
 
-$api = new OP_API ('https://api.openprovider.eu');
+use OpenProdider\API;
+use OpenProdider\Request;
+
+$api = new API ('https://api.openprovider.eu');
 
 $request = new OP_Request;
 $request
