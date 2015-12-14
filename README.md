@@ -14,8 +14,8 @@ Example
 ```php
 require 'vendor/autoload.php';
 
-use OpenProdider\API;
-use OpenProdider\Request;
+use OpenProvider\API;
+use OpenProvider\Request;
 
 $api = new API ('https://api.openprovider.eu');
 
