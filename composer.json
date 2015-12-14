@@ -1,19 +1,22 @@
 {
-    "name": "roelvanduijnhoven/openprovider-php",
+    "name": "initworks/openprovider-php",
     "type": "library",
     "description": "PHP interface to OpenProvider API",
     "require": {
-        "php": ">=5.2.4"
+        "php": ">=5.4"
+    },
+    "require-dev": {
+          "phpunit/phpunit": "^4.8"
     },
     "authors": [
         {
-            "name": "Roel van Duijnhoven",
-            "email": "roel.duijnhoven@gmail.com"
+            "name": "Richard Augspurger",
+            "email": "richard@initworks.com"
         }
     ],
     "autoload": {
-        "psr-0" : {
-            "OP_" : "src/"
+        "psr-4" : {
+            "OpenProvider\\" : "src/OpenProvider"
         }
     }
 }

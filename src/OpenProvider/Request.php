@@ -1,6 +1,10 @@
 <?php
 
-class OP_Request
+namespace OpenProvider;
+
+use DOMDocument;
+
+class Request
 {
     protected $cmd = null;
     protected $args = null;
@@ -30,7 +34,7 @@ class OP_Request
     {
         $dom = new DOMDocument;
         $dom->loadXML($str, LIBXML_NOBLANKS);
-        $arr = OP_API::convertXmlToPhpObj($dom->documentElement);
+        $arr = API::convertXmlToPhpObj($dom->documentElement);
         list($dummy, $credentials) = each($arr);
         list($this->cmd, $this->args) = each($arr);
         $this->username = $credentials['username'];
@@ -113,24 +117,24 @@ class OP_Request
     }
     public function _getRequest ()
     {
-        $dom = new DOMDocument('1.0', OP_API::$encoding);
+        $dom = new DOMDocument('1.0', API::$encoding);
 
         $credentialsElement = $dom->createElement('credentials');
         $usernameElement = $dom->createElement('username');
         $usernameElement->appendChild(
-            $dom->createTextNode(OP_API::encode($this->username))
+            $dom->createTextNode(API::encode($this->username))
         );
         $credentialsElement->appendChild($usernameElement);
 
         $passwordElement = $dom->createElement('password');
         $passwordElement->appendChild(
-            $dom->createTextNode(OP_API::encode($this->password))
+            $dom->createTextNode(API::encode($this->password))
         );
         $credentialsElement->appendChild($passwordElement);
 
         $hashElement = $dom->createElement('hash');
         $hashElement->appendChild(
-            $dom->createTextNode(OP_API::encode($this->hash))
+            $dom->createTextNode(API::encode($this->hash))
         );
         $credentialsElement->appendChild($hashElement);
 
@@ -155,7 +159,7 @@ class OP_Request
         if (isset($this->misc)) {
             $miscElement = $dom->createElement('misc');
             $credentialsElement->appendChild($miscElement);
-            OP_API::convertPhpObjToDom($this->misc, $miscElement, $dom);
+            API::convertPhpObjToDom($this->misc, $miscElement, $dom);
         }
 
         $rootElement = $dom->createElement('openXML');
@@ -165,7 +169,7 @@ class OP_Request
         $cmdNode = $rootNode->appendChild(
             $dom->createElement($this->getCommand())
         );
-        OP_API::convertPhpObjToDom($this->args, $cmdNode, $dom);
+        API::convertPhpObjToDom($this->args, $cmdNode, $dom);
 
         return $dom->saveXML();
     }
