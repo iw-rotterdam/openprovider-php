@@ -113,24 +113,75 @@ class API
     }
 
     /**
+     * Check if xml is created from string
+     *
+     * @param string $str
+     * @return bool
+     */
+    static function checkCreateXml($str)
+    {
+        $dom = new DOMDocument;
+        $dom->encoding = 'utf-8';
+
+        $textNode = $dom->createTextNode($str);
+
+        if (!$textNode) {
+            return false;
+        }
+
+        $element = $dom->createElement('element')
+            ->appendChild($textNode);
+
+        if (!$element) {
+            return false;
+        }
+
+        @$dom->appendChild($element);
+
+        $xml = $dom->saveXML();
+
+        return !empty($xml);
+    }
+
+    /**
      * Encode an HTML string
      *
      * @param $str
      * @return string
      */
-    public static function encode($str)
+    static function encode ($str)
     {
-        $ret = @htmlentities($str, null, API::$encoding);
+       $ret = @htmlentities($str, null, API::$encoding);
+       // Ticket #18 "Encoding issues when parsing XML"
+       // Some tables have data stored in two encodings
+       if (strlen($str) && !strlen($ret)) {
+           error_log('ISO charset date = '.date('d.m.Y H:i:s').',STR = ' . $str . ', debug = ' . var_export(
+               apiDebugHelper::getCallStack(["level" => 10]), true
+           ), 1, 'vsaveliev@openprovider.nl');
+           $str = iconv('ISO-8859-1', 'UTF-8', $str);
+       }
 
-        // Ticket #18 "Encoding issues when parsing XML"
-        // Some tables have data stored in two encodings
-        if (strlen($str) && !strlen($ret)) {
-            $str = iconv('ISO-8859-1', 'UTF-8', $str);
-            $ret = htmlentities($str, null, self::$encoding);
-        }
+       if (!empty($str) && is_object($str)) {
+           error_log('Exception convertPhpObjToDom date = '.date('d.m.Y H:i:s').', object class = ' . get_class($str) . ', debug = ' . var_export(
+               apiDebugHelper::getCallStack(["level" => 10]), true
+           ), 1, 'vsaveliev@openprovider.nl');
 
-        return $ret;
-    }
+           if (method_exists($str , '__toString')) {
+               $str = $str->__toString();
+           } else {
+               return $str;
+           }
+       }
+
+       if (!empty($str) && is_string($str) && !self::checkCreateXml($str)) {
+           error_log('Exception convertPhpObjToDom date = '.date('d.m.Y H:i:s').', STR = ' . $str . ', debug = ' . var_export(
+               apiDebugHelper::getCallStack(["level" => 10]), true
+           ), 1, 'vsaveliev@openprovider.nl');
+
+           $str = htmlentities($str, null, API::$encoding);
+       }
+       return $str;
+   }
 
     /**
      * Decode a string into HTML
